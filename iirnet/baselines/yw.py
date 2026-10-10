@@ -92,6 +92,24 @@ def yulewalk(N, f, m, npt=512):
     # compute denominator (we will need to relfect poles still)
     a = denf(R, N)
 
+    # Reflect unstable poles inside the unit circle before fitting numerator.
+    poles = np.roots(a.reshape(-1))
+    outside = np.abs(poles) > 1.0
+    poles[outside] = 1.0 / np.conj(poles[outside])
+
+    # Keep poles strictly inside, including numerical boundary cases.
+    radius_limit = 1.0 - 1e-8
+    near_boundary = np.abs(poles) >= radius_limit
+    poles[near_boundary] *= (
+        radius_limit / np.abs(poles[near_boundary])
+    )
+
+    a = np.real_if_close(np.poly(poles))
+    if np.iscomplexobj(a):
+        raise ValueError("Pole stabilization produced complex coefficients")
+
+    a = np.asarray(a, dtype=np.float64).reshape(-1, 1)
+
     # divide first term
     h = np.concatenate(([R[:, 0] / 2], R[:, 1:nr]), axis=-1)
 
