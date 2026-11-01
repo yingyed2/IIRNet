@@ -360,6 +360,7 @@ def generate_uniform_disk_filter(
     min_freq=20.0,
     log=False,
     fs=44100,
+    max_radius=0.9,
 ):
 
     ##a and b are used for the loguniform sampling
@@ -367,7 +368,7 @@ def generate_uniform_disk_filter(
         0.5 * fs * np.pi
     )  ##MIN CAN'T BE ZERO, CHOOSING 20HZ AS MINIMUM POLE/ZERO FREQUENCY
     b = np.pi
-    norm = 0.9  ##SHOULD BE HYPERPARAMETER
+    norm = max_radius  ##SHOULD BE HYPERPARAMETER
 
     sos = []
     if min_order == None:
@@ -398,8 +399,13 @@ def generate_uniform_disk_filter(
         den_poly = [1, -2 * p_mag * np.cos(p_arg), p_mag ** 2]
         sos.append(np.hstack((num_poly, den_poly)))
     if chosen_max % 2 == 1:  ##IF ODD, add an extra zero and pole
-        zeros_mags = torch.distributions.uniform.Uniform(0.0, 1).sample()
-        poles_mags = torch.distributions.uniform.Uniform(0.0, 1).sample()
+        zeros_mags = torch.distributions.uniform.Uniform(
+            0.0, norm
+        ).sample()
+
+        poles_mags = torch.distributions.uniform.Uniform(
+            0.0, norm
+        ).sample()
         num_poly = [1, -1 * zeros_mags, 0]
         den_poly = [1, -1 * poles_mags, 0]
         sos.append(np.hstack((num_poly, den_poly)))
@@ -430,6 +436,7 @@ def generate_uniform_mag_disk_filter(
     min_freq=20.0,
     log=False,
     fs=44100,
+    norm = 0.9
 ):
 
     ##a and b are used for the loguniform sampling
@@ -437,7 +444,7 @@ def generate_uniform_mag_disk_filter(
         0.5 * fs * np.pi
     )  ##MIN CAN'T BE ZERO, CHOOSING 20HZ AS MINIMUM POLE/ZERO FREQUENCY
     b = np.pi
-    norm = 0.9  #
+    norm = max_radius  #
 
     sos = []
     if min_order == None:
@@ -449,11 +456,13 @@ def generate_uniform_mag_disk_filter(
     chosen_max = np.max((num_ord, den_ord))
     all_num = np.zeros(chosen_max, dtype=np.cdouble)
     all_den = np.zeros(chosen_max, dtype=np.cdouble)
-    zeros_mags = torch.sqrt(
-        torch.distributions.uniform.Uniform(eps, norm).sample(num_ord // 2)
+
+    zeros_mags = norm * torch.sqrt(
+        torch.rand(int(num_ord[0] // 2))
     )
-    poles_mags = torch.sqrt(
-        torch.distributions.uniform.Uniform(eps, norm).sample(num_ord // 2)
+
+    poles_mags = norm * torch.sqrt(
+        torch.rand(int(num_ord[0] // 2))
     )
     if not log:
         zeros_args = torch.distributions.uniform.Uniform(eps, np.pi).sample(
@@ -472,8 +481,14 @@ def generate_uniform_mag_disk_filter(
         den_poly = [1, -2 * p_mag * np.cos(p_arg), p_mag ** 2]
         sos.append(np.hstack((num_poly, den_poly)))
     if chosen_max % 2 == 1:  ##IF ODD, add an extra zero and pole
-        zeros_mags = torch.distributions.uniform.Uniform(0.0, 1).sample()
-        poles_mags = torch.distributions.uniform.Uniform(0.0, 1).sample()
+        zeros_mags = torch.distributions.uniform.Uniform(
+            0.0, norm
+        ).sample()
+
+        poles_mags = torch.distributions.uniform.Uniform(
+            0.0, norm
+        ).sample()
+        
         num_poly = [1, -1 * zeros_mags, 0]
         den_poly = [1, -1 * poles_mags, 0]
         sos.append(np.hstack((num_poly, den_poly)))

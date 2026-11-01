@@ -28,10 +28,8 @@ def main():
             order=order,
         )
 
-        # The generator samples [0, pi), excluding Nyquist.
         frequencies = np.arange(num_points) / num_points
 
-        # Append the actual Nyquist magnitude for MYW's specification.
         _, endpoint_h = signal.sosfreqz(target_sos, worN=[np.pi])
         design_frequencies = np.append(frequencies, 1.0)
         design_magnitude = np.append(mag, np.abs(endpoint_h[0]))
@@ -50,7 +48,6 @@ def main():
         assert actual_order == order, "Unexpected fitted filter order"
         assert np.isfinite(fitted_sos).all(), "Nonfinite coefficients"
 
-        # Compare both responses on exactly the same frequency grid.
         w, target_h = signal.sosfreqz(target_sos, worN=num_points)
         _, fitted_h = signal.sosfreqz(fitted_sos, worN=w)
 
