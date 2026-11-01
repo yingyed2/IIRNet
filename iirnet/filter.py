@@ -389,7 +389,7 @@ def generate_uniform_disk_filter(
         poles_args = torch.distributions.uniform.Uniform(eps, np.pi).sample(
             num_ord // 2
         )
-    else:
+    else: 
         zeros_args = loguniform.rvs(a, b, size=(num_ord) // 2)
         poles_args = loguniform.rvs(a, b, size=(num_ord) // 2)
     for z_mag, z_arg, p_mag, p_arg in zip(

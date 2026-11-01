@@ -94,7 +94,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_train_examples,
-        precompute=True,
+        precompute=args.precompute,
     )
 
     train_datasetD = IIRFilterDataset(
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_train_examples,
-        precompute=True,
+        precompute=args.precompute,
     )
 
     train_datasetE = IIRFilterDataset(
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_val_examples,
-        precompute=args.precompute,
+        precompute=True,
     )
 
     val_datasetD = IIRFilterDataset(
@@ -183,7 +183,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_val_examples,
-        precompute=args.precompute,
+        precompute=True,
     )
 
     val_datasetE = IIRFilterDataset(

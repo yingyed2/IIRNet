@@ -18,6 +18,7 @@ class MLPModel(IIRNet):
         normalization="none",
         lr=3e-4,
         eps=1e-8,
+        max_root_radius=0.9,
         **kwargs,
     ):
         super(MLPModel, self).__init__()
@@ -72,20 +73,22 @@ class MLPModel(IIRNet):
 
         # ensure stability
         pole = torch.complex(pole_real, pole_imag)
+
         pole = (
-            (1 - self.hparams.eps)
+            (self.hparams.max_root_radius - self.hparams.eps)
             * pole
             * torch.tanh(pole.abs())
-            / (pole.abs().clamp(self.hparams.eps))
+            / pole.abs().clamp(min=self.hparams.eps)
         )
 
         # ensure zeros inside unit circle
         zero = torch.complex(zero_real, zero_imag)
+
         zero = (
-            (1 - self.hparams.eps)
+            (self.hparams.max_root_radius - self.hparams.eps)
             * zero
             * torch.tanh(zero.abs())
-            / (zero.abs().clamp(self.hparams.eps))
+            / zero.abs().clamp(min=self.hparams.eps)
         )
 
         # Fix filter gain to be 1
@@ -150,5 +153,10 @@ class MLPModel(IIRNet):
         parser.add_argument("--eps", type=float, default=1e-8)
         parser.add_argument("--priority_order", action="store_true")
         parser.add_argument("--experiment_name", type=str, default="experiment")
+        parser.add_argument(
+            "--max_root_radius",
+            type=float,
+            default=0.9,
+        )
 
         return parser
