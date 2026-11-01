@@ -94,7 +94,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_train_examples,
-        precompute=args.precompute,
+        precompute=True,
     )
 
     train_datasetD = IIRFilterDataset(
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         num_points=args.num_points,
         max_order=args.max_train_order,
         num_examples=args.num_train_examples,
-        precompute=args.precompute,
+        precompute=True,
     )
 
     train_datasetE = IIRFilterDataset(
@@ -137,6 +137,9 @@ if __name__ == "__main__":
                 train_datasetE,
                 train_datasetF,
             ]
+        "cd": torch.utils.data.ConcatDataset(
+            [train_datasetC, train_datasetD]
+        ),
         ),
     }
 
@@ -215,6 +218,9 @@ if __name__ == "__main__":
                 val_datasetE,
                 val_datasetF,
             ]
+        "cd": torch.utils.data.ConcatDataset(
+            [val_datasetC, val_datasetD]
+        ),
         ),
     }
 
