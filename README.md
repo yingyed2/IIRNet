@@ -154,3 +154,26 @@ Note: Requires PyTorch >=1.8
 | (D) | Uniform magnitude disk |  `uniform_mag_disk`   |
 | (E) | Characteristic         |  `char_poly`          |
 | (F) | Uniform parametric     |  `uniform_parametric` |
+
+
+## IIRNet Reproduction
+
+Reproduced a simplified IIRNet using on-the-fly generation of 10th-order IIR filters from families C and D, constraining pole and zero magnitudes to 0.9.
+
+Trained a small MLP with 3 hidden layers of 32 neurons over 30 epochs, using 512-point magnitude responses as inputs.
+
+Evaluated the model against Modified Yule–Walker (MYW) on 2,000 unseen filters (1,000 per family).
+
+### Results
+
+**Family C**
+- MLP: 1.269 dB pooled RMSE, 1.041 dB median RMSE
+- MYW: 2.227 dB pooled RMSE, 0.229 dB median RMSE
+
+**Family D**
+- MLP: 1.908 dB pooled RMSE, 1.533 dB median RMSE
+- MYW: 4.717 dB pooled RMSE, 0.398 dB median RMSE
+
+The MLP achieved lower overall RMSE and more consistent predictions, while MYW achieved lower median error but performed worse on difficult examples. Both methods produced stable filters across all test cases.
+
+Training, evaluation, and comparison scripts are included in the repository.
