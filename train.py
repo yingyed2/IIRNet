@@ -128,6 +128,7 @@ if __name__ == "__main__":
         "uniform_mag_disk": train_datasetD,
         "char_poly": train_datasetE,
         "uniform_parametric": train_datasetF,
+
         "all": torch.utils.data.ConcatDataset(
             [
                 train_datasetA,
@@ -137,9 +138,10 @@ if __name__ == "__main__":
                 train_datasetE,
                 train_datasetF,
             ]
+        ),
+
         "cd": torch.utils.data.ConcatDataset(
             [train_datasetC, train_datasetD]
-        ),
         ),
     }
 
@@ -209,6 +211,7 @@ if __name__ == "__main__":
         "uniform_mag_disk": val_datasetD,
         "char_poly": val_datasetE,
         "uniform_parametric": val_datasetF,
+
         "all": torch.utils.data.ConcatDataset(
             [
                 val_datasetA,
@@ -218,15 +221,16 @@ if __name__ == "__main__":
                 val_datasetE,
                 val_datasetF,
             ]
+        ),
+
         "cd": torch.utils.data.ConcatDataset(
             [val_datasetC, val_datasetD]
-        ),
         ),
     }
 
     val_dataloader = torch.utils.data.DataLoader(
         filter_val_datasets[args.filter_method],
-        shuffle=args.shuffle,
+        shuffle=False,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         worker_init_fn=wif,

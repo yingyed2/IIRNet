@@ -436,7 +436,7 @@ def generate_uniform_mag_disk_filter(
     min_freq=20.0,
     log=False,
     fs=44100,
-    norm = 0.9
+    max_radius=0.9,
 ):
 
     ##a and b are used for the loguniform sampling
