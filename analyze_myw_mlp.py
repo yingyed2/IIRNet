@@ -1,9 +1,3 @@
-"""Analyze MYW vs. MLP errors on the saved, paired C/D benchmark.
-
-Run from the IIRNet root after compare_myw_mlp.py. Makes distribution plots,
-checks error versus target pole radius, and visualizes representative filters.
-"""
-
 import argparse
 import csv
 import json
@@ -109,7 +103,7 @@ def plot_example(family, label, row, target_sos, model, num_points, order, outpu
     mlp_db = response_db(mlp_sos, frequencies)
     myw_db = response_db(myw_sos, frequencies)
     freq_hz = frequencies / (2 * np.pi) * 44100
-    valid = freq_hz > 0  # The zero-frequency bin cannot be shown on a log axis.
+    valid = freq_hz > 0
 
     fig, axes = plt.subplots(1, 3, figsize=(16, 4))
     for name, curve in (("Target", target_db), ("MLP", mlp_db), ("MYW", myw_db)):

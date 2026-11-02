@@ -1,9 +1,3 @@
-"""Evaluate a trained IIRNet MLP on 1,000 fresh filters from each of C and D.
-
-Uses the same frequency-response dB error convention as iirnet.loss.LogMagFrequencyLoss.
-Saves the exact target SOS arrays for later comparisons with MYW.
-"""
-
 import argparse
 import csv
 from pathlib import Path
@@ -43,7 +37,6 @@ def evaluate_family(model, method, num_examples, batch_size, num_points, order):
             predicted_db = 20 * torch.log10(signal.mag(predicted_response) + 1e-8)
             target_db = 20 * torch.log10(signal.mag(target_response) + 1e-8)
 
-            # One mean-squared dB error per filter, averaged across frequency bins.
             mse_per_filter = ((predicted_db - target_db) ** 2).mean(dim=-1)
             mse_batches.append(mse_per_filter.cpu().numpy())
             target_sos_batches.append(target_sos.cpu().numpy())
@@ -83,7 +76,6 @@ def main():
     for offset, (label, method) in enumerate(
         (("C", "uniform_disk"), ("D", "uniform_mag_disk"))
     ):
-        # Separate fixed seeds make this evaluation repeatable, independent of training.
         torch.manual_seed(args.seed + offset)
         np.random.seed(args.seed + offset)
 

@@ -1,9 +1,3 @@
-"""Evaluate MYW and a trained MLP on identical saved C/D IIR filters.
-
-Run from the IIRNet repository root. Uses SciPy frequency responses for BOTH
-models so neither gets a different numerical definition of dB error.
-"""
-
 import argparse
 import csv
 import json
@@ -30,7 +24,6 @@ def response_db(sos, frequencies):
 
 
 def fit_myw(target_sos, target_magnitude, num_points, order):
-    # Match experiments/benchmark_myw.py: include the exact Nyquist endpoint.
     frequencies = np.arange(num_points) / num_points
     _, nyquist_h = signal.sosfreqz(target_sos, worN=[np.pi])
     design_frequencies = np.append(frequencies, 1.0)
@@ -103,7 +96,6 @@ def main():
                 target_magnitude = np.abs(target_h)
                 target_db = 20 * np.log10(target_magnitude + EPS)
 
-                # Exactly the input normalization from IIRFilterDataset.__getitem__.
                 normalized_input = np.clip(target_db, -128, 128) / 128
                 model_input = torch.tensor(normalized_input, dtype=torch.float32)[None]
                 with torch.inference_mode():

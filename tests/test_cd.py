@@ -40,7 +40,6 @@ class TestCDPipeline(unittest.TestCase):
                             max(abs(poles)), 0.900001
                         )
 
-                # Repeated indexing should generate new samples.
                 self.assertFalse(
                     torch.equal(dataset[0][-1], dataset[0][-1])
                 )

@@ -14,7 +14,6 @@ def wif(id):  # worker init function
     np.random.seed((id + torch.initial_seed()) % np.iinfo(np.int32).max)
 
 
-# setup the dataloaders
 train_datasetA = IIRFilterDataset(
     method="normal_poly",
     num_points=num_points,
@@ -97,7 +96,6 @@ for filter_method, filter_dataset in filter_datasets.items():
 
     for bidx, batch in enumerate(train_dataloader, 0):
         mag, phs, real, imag, sos = batch
-        # print(f"{filter_method}: {mag.min()} {mag.max()}")
         ranges.append(mag.min())
         ranges.append(mag.max())
         means.append(mag.mean())
