@@ -98,10 +98,14 @@ def main():
 
                 normalized_input = np.clip(target_db, -128, 128) / 128
                 model_input = torch.tensor(normalized_input, dtype=torch.float32)[None]
+                start = time.perf_counter()
                 with torch.inference_mode():
                     predicted_sos, _ = model(model_input)
+                mlp_elapsed_ms = 1000 * (time.perf_counter() - start)
                 predicted_sos = predicted_sos.squeeze(0).cpu().numpy()
 
+                _, mlp_poles, _ = signal.sos2zpk(predicted_sos)
+                mlp_radius = float(np.max(np.abs(mlp_poles)))
                 mlp_db = response_db(predicted_sos, frequencies)
                 mlp_mse = float(np.mean((mlp_db - target_db) ** 2))
 
@@ -110,6 +114,9 @@ def main():
                     "example": index,
                     "mlp_mse_db2": mlp_mse,
                     "mlp_rmse_db": float(np.sqrt(mlp_mse)),
+                    "mlp_elapsed_ms": mlp_elapsed_ms,
+                    "mlp_max_pole_radius": mlp_radius,
+                    "mlp_stable": bool(mlp_radius < 1),
                     "myw_status": "ok",
                     "myw_mse_db2": "",
                     "myw_rmse_db": "",
@@ -151,6 +158,7 @@ def main():
                 "myw_successful": len(myw_rows),
                 "myw_stable": len(stable_rows),
                 "mlp": mse_statistics(family_rows, "mlp_mse_db2"),
+                "mlp_on_myw_successful": mse_statistics(myw_rows, "mlp_mse_db2"),
                 "myw_all_successful": mse_statistics(myw_rows, "myw_mse_db2"),
                 "myw_stable_only": mse_statistics(stable_rows, "myw_mse_db2"),
             }

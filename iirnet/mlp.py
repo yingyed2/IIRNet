@@ -50,11 +50,17 @@ class MLPModel(IIRNet):
             self.bn = torch.nn.BatchNorm1d(self.hparams.num_points * 2)
 
     def forward(self, mag, phs=None):
+        return self.decode_filter(self.predict_raw(mag))
+
+    def predict_raw(self, mag):
         x = mag
 
         for layer in self.layers:
             x = layer(x)
 
+        return x
+
+    def decode_filter(self, x):
         # reshape into sos format (n_section, (b0, b1, b2, a0, a1, a2))
         n_sections = self.hparams.model_order // 2
         sos = x.view(-1, n_sections, 6)

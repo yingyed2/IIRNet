@@ -1,0 +1,66 @@
+{
+  "checkpoint": "checkpoints\\update3_cd_3x64.ckpt",
+  "test_filters": "results\\update3\\validation\\3x32\\test_filters.npz",
+  "frequency_points": 512,
+  "filter_order": 10,
+  "families": {
+    "C": {
+      "attempted": 250,
+      "myw_successful": 250,
+      "myw_stable": 250,
+      "mlp": {
+        "n": 250,
+        "pooled_rmse_db": 1.039063986479197,
+        "median_rmse_db": 0.8954360916644464,
+        "p95_rmse_db": 1.7805852983537482
+      },
+      "mlp_on_myw_successful": {
+        "n": 250,
+        "pooled_rmse_db": 1.039063986479197,
+        "median_rmse_db": 0.8954360916644464,
+        "p95_rmse_db": 1.7805852983537482
+      },
+      "myw_all_successful": {
+        "n": 250,
+        "pooled_rmse_db": 2.529230628078816,
+        "median_rmse_db": 0.2517314534851878,
+        "p95_rmse_db": 2.9575768635374735
+      },
+      "myw_stable_only": {
+        "n": 250,
+        "pooled_rmse_db": 2.529230628078816,
+        "median_rmse_db": 0.2517314534851878,
+        "p95_rmse_db": 2.9575768635374735
+      }
+    },
+    "D": {
+      "attempted": 250,
+      "myw_successful": 250,
+      "myw_stable": 250,
+      "mlp": {
+        "n": 250,
+        "pooled_rmse_db": 1.447245746613366,
+        "median_rmse_db": 1.192888936532058,
+        "p95_rmse_db": 2.5236445112877317
+      },
+      "mlp_on_myw_successful": {
+        "n": 250,
+        "pooled_rmse_db": 1.447245746613366,
+        "median_rmse_db": 1.192888936532058,
+        "p95_rmse_db": 2.5236445112877317
+      },
+      "myw_all_successful": {
+        "n": 250,
+        "pooled_rmse_db": 3.8787970669521235,
+        "median_rmse_db": 0.3579747509971871,
+        "p95_rmse_db": 7.444231818352252
+      },
+      "myw_stable_only": {
+        "n": 250,
+        "pooled_rmse_db": 3.8787970669521235,
+        "median_rmse_db": 0.3579747509971871,
+        "p95_rmse_db": 7.444231818352252
+      }
+    }
+  }
+}
